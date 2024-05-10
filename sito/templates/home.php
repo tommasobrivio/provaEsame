@@ -1,6 +1,21 @@
 <?php
-if (isset($_SESSION))
+if (!isset($_SESSION))
     session_start();
+
+function homeGuest(){
+    echo '<div>
+            <input type="text" placeholder="username" id="username">
+            <input type="password" placeholder="password" id="password">
+            <button id="login">LOGIN</button><br><br>
+            <a href="registration.php">REGISTRATI</a>
+          </div><br><br>';
+}
+
+function homeClient(){
+    echo '<div>
+            <a href="logout.php">LOGOUT</a>
+          </div><br><br>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +31,20 @@ if (isset($_SESSION))
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        $(document).ready(function () {
+
+        function findLatLonAddMarker(address, mymap){
+            var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address);
+
+            $.getJSON(url, function(data) {
+                if (data.length > 0) {
+                var lat = parseFloat(data[0].lat);
+                var lon = parseFloat(data[0].lon);
+                L.marker([lat, lon]).addTo(mymap).bindPopup(address);
+                }
+            });
+        }
+
+        function loadMap(){
             // Inizializza la mappa
             var mymap = L.map('mapid').setView([45.738777965232245, 9.129964082099326], 13);
 
@@ -26,11 +54,38 @@ if (isset($_SESSION))
             }).addTo(mymap);
 
             // Aggiungi un marker alla mappa
-            $.get('./ajax/getStazioni.php', {}, function(data){
+            $.get('../ajax/getStazioni.php', {}, function(data){
                 //prendere le stazioni, salvarle in un file json e creare vari marker per ogni stazione
+                data['message'].forEach(element => {
+                    findLatLonAddMarker(element['via'] + ', ' + element['citta'] + ', ' + element['provincia'] + ', ' + element['regione'] + ', ' + 'Italy', mymap);
+                });
             })
-            var marker = L.marker([45.738777965232245, 9.129964082099326]).addTo(mymap);
-            marker.bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
+        }
+
+
+        $(document).ready(function () {
+            loadMap();
+
+            $('#login').click(function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                if(username==null || username=='' || password==null || password=='')
+                    alert('mancano dei dati');
+
+                else{
+
+                    $.post('../ajax/checkLogin.php', {'username': username,'password': password}, function(data){
+                        if(data['status'] == 'success'){
+                            window.location.reload();
+                        }
+                        else{
+                            console.log(data['message'])
+                        }
+                    });
+
+                }
+            })
         });
     </script>
 
@@ -43,9 +98,9 @@ if (isset($_SESSION))
         if (isset($_SESSION['logged'])) {
             echo "Benvenuto " . $_SESSION['username'];
             echo homeClient();
-        } /*else {
+        } else {
             echo homeGuest();
-        }*/
+        }
         ?>
 
         <div id="mapid" style="width: 100%; height: 400px;"></div>

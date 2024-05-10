@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mag 03, 2024 alle 18:40
+-- Creato il: Mag 10, 2024 alle 08:14
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -32,8 +32,8 @@ CREATE TABLE `admin` (
   `email` varchar(64) NOT NULL,
   `username` varchar(32) NOT NULL,
   `passsword` varchar(32) NOT NULL,
-  `nome` varchar(32) NOT NULL,
-  `cognome` varchar(32) NOT NULL
+  `nome` varchar(32) DEFAULT NULL,
+  `cognome` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -100,7 +100,7 @@ CREATE TABLE `operazione` (
 CREATE TABLE `stazione` (
   `ID` int(11) NOT NULL,
   `codice` int(11) NOT NULL,
-  `slot` int(11) NOT NULL,
+  `slot` int(11) DEFAULT NULL,
   `regione` varchar(32) NOT NULL,
   `provincia` varchar(32) NOT NULL,
   `citta` varchar(32) NOT NULL,
@@ -108,9 +108,16 @@ CREATE TABLE `stazione` (
   `via` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
 --
 -- Indici per le tabelle scaricate
 --
+
+--
+-- Indici per le tabelle `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indici per le tabelle `bicicletta`
@@ -143,6 +150,12 @@ ALTER TABLE `stazione`
 --
 
 --
+-- AUTO_INCREMENT per la tabella `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `bicicletta`
 --
 ALTER TABLE `bicicletta`
@@ -152,7 +165,7 @@ ALTER TABLE `bicicletta`
 -- AUTO_INCREMENT per la tabella `clienti`
 --
 ALTER TABLE `clienti`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `operazione`
@@ -164,7 +177,7 @@ ALTER TABLE `operazione`
 -- AUTO_INCREMENT per la tabella `stazione`
 --
 ALTER TABLE `stazione`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
