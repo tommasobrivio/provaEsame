@@ -8,6 +8,8 @@ require_once ('../database/credentials.php');
 
 global $user, $host, $psw, $db;
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 if(!isset($_POST['username']) || !isset($_POST['password'])){
     $json = array("status" => "error", "message" => "parametri mancanti");
 }

@@ -3,17 +3,18 @@ if (!isset($_SESSION))
     session_start();
 
 function homeGuest(){
-    echo '<div>
-            <input type="text" placeholder="username" id="username">
-            <input type="password" placeholder="password" id="password">
-            <button id="login">LOGIN</button><br><br>
-            <a href="registration.php">REGISTRATI</a>
+    echo '<div class="form col col-4">
+            <input type="text" placeholder="username" id="username" class="form-control border-black input">
+            <input type="password" placeholder="password" id="password" class="form-control border-black input"><br>
+            <button id="login" class="btn btn-dark">LOGIN</button><br><br>
+            Non sei registrato? <a href="registration.php" style="color:black !important"><button class="btn btn-dark">REGISTRATI</button></a>
+
           </div><br><br>';
 }
 
 function homeClient(){
     echo '<div>
-            <a href="logout.php">LOGOUT</a>
+            <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>
           </div><br><br>';
 }
 ?>
@@ -27,7 +28,9 @@ function homeClient(){
     <title>Home</title>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
@@ -92,7 +95,7 @@ function homeClient(){
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" style="padding-top:2%">
 
         <?php
         if (isset($_SESSION['logged'])) {

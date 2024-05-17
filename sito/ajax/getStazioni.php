@@ -5,6 +5,8 @@ require_once ('../database/credentials.php');
 
 global $user, $host, $psw, $db;
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 $conn = new mysqli($host, $user, $psw, $db);
 
 $conn->set_charset('utf8');
