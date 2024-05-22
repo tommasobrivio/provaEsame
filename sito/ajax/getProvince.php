@@ -13,10 +13,15 @@ $conn = new mysqli($host, $user, $psw, $db);
 
 $conn->set_charset("utf8");
 
-if(isset($_GET["codice"])) {
+if(isset($_GET["nome"]) ) {
+    $stmt = $conn->prepare("SELECT * FROM gi_province WHERE denominazione_provincia=?");
+    $stmt->bind_param("s", $_GET["nome"]);
+} 
+else if(isset($_GET["codice"])){
     $stmt = $conn->prepare("SELECT * FROM gi_province WHERE codice_regione=?");
     $stmt->bind_param("s", $_GET["codice"]);
-} else {
+}
+else {
     $stmt = $conn->prepare("SELECT * FROM gi_province");
 }
 
@@ -26,15 +31,19 @@ $result = $stmt->get_result();
 // Crea un array per contenere i risultati
 $province = array();
 
-if ($result->num_rows > 0) {
+if ($result->num_rows > 1) {
     // Riempi l'array con i dati della tabella "gi_province"
     while ($row = $result->fetch_assoc()) {
         $province[] = $row;
     }
+
+    // Chiudi la connessione al database
+    $conn->close();
+
+    // Ritorna i dati in formato JSON
+    echo json_encode($province);
 }
-
-// Chiudi la connessione al database
-$conn->close();
-
-// Ritorna i dati in formato JSON
-echo json_encode($province);
+else if($result->num_rows == 1){
+    // Ritorna i dati in formato JSON
+    echo json_encode($result->fetch_assoc()['sigla_provincia']);
+}

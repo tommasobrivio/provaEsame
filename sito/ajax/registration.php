@@ -7,11 +7,6 @@ global $host, $user, $psw, $db;
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-//creo connessione al database
-$conn = new mysqli($host, $user, $psw, $db);
-
-$conn->set_charset("utf8");
-
 if (
     isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])
     && isset($_POST['cartaCredito']) && isset($_POST['regione']) && isset($_POST['provincia']) && isset($_POST['comune'])
@@ -31,13 +26,48 @@ if (
     $cap = $_POST['cap'];
     $via = $_POST['via'];
 
+    //creo connessione al database comuni
+    $conn = new mysqli($host, $user, $psw, 'gi_db_comuni');
 
+    $conn->set_charset("utf8");
+
+    //prendo il nome regione avendo il codice
+    $stmt = $conn->prepare('SELECT denominazione_regione FROM gi_regioni WHERE codice_regione=?');
+    $stmt->bind_param("s", $regione);
+    $stmt->execute();
+    $regione=($stmt->get_result())->fetch_assoc()['denominazione_regione'];
+    //chiudi connessione 
+    $stmt->close();
+
+    //prendo il nome provincia avendo il codice
+    $stmt = $conn->prepare('SELECT denominazione_provincia FROM gi_province WHERE sigla_provincia=?');
+    $stmt->bind_param("s", $provincia);
+    $stmt->execute();
+    $provincia=($stmt->get_result())->fetch_assoc()['denominazione_provincia'];
+    //chiudi connessione 
+    $stmt->close();
+
+    //prendo il nome comune avendo il cap
+    $stmt = $conn->prepare('SELECT denominazione_ita FROM gi_comuni_cap WHERE cap=?');
+    $stmt->bind_param("s", $comune);
+    $stmt->execute();
+    $comune=($stmt->get_result())->fetch_assoc()['denominazione_ita'];
+    //chiudi connessione 
+    $stmt->close();
+
+    $conn->close();
+
+
+    //creo connessione al database stazione_biciclette
+    $conn = new mysqli($host, $user, $psw, $db);
+
+    $conn->set_charset("utf8");
     //inserisco l'utente
-    $sql = "INSERT clienti (email, username, password, nome, cognome, carta_credito, regione, provincia, comune, cap, via)
+    $sql = "INSERT clienti (email, username, password, nome, cognome, carta_credito, regione, provincia, citta, cap, via)
         VALUES(?,?,md5(?),?,?,?,?,?,?,?,?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssisssis", $email, $username, $password, $nome, $cognome, $cartaCredito, $regione, $provincia, $comune, $cap, $via);
+    $stmt->bind_param("sssssssssis", $email, $username, $password, $nome, $cognome, $cartaCredito, $regione, $provincia, $comune, $cap, $via);
     
     $stmt->execute();
 
@@ -55,6 +85,4 @@ else {
 
 
 //ritorna i dati in formato JSON
-echo json_encode($data);
-
-?>
+echo json_encode($json);

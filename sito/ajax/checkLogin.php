@@ -14,7 +14,7 @@ if(!isset($_POST['username']) || !isset($_POST['password'])){
     $json = array("status" => "error", "message" => "parametri mancanti");
 }
 else{
-
+    
     $username = $_POST['username'];
     $password = $_POST['password'];
 
@@ -22,10 +22,25 @@ else{
 
     $conn->set_charset('utf8');
 
-    $sql = "SELECT * FROM clienti WHERE username=? AND password=md5(?)";
+    if (str_contains($username, "_"))
+    {
+        $select = "SELECT * FROM clienti WHERE username = ? AND password = md5(?)";
+        $_SESSION["role"] = "client";
+    }
+    else if (str_contains($username, "."))
+    {
+        $select = "SELECT * FROM admin WHERE username = ? AND password = md5(?)";
+        $_SESSION["role"] = "admin";
+    }
+    else
+    {
+        $json = array("status" => "error", "message" => "nessun utente trovato1");
+        echo json_encode($json);
+        return;
+    }
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ss', $username, $password);
+    $stmt = $conn->prepare($select);
+    $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -35,6 +50,7 @@ else{
 
         $_SESSION['logged'] = true;
         $_SESSION['username']=$username;
+        $_SESSION["ID"] = $result->fetch_assoc()["ID"];
 
         $json = array("status" => "success", "message" => "cliente trovato");
     }

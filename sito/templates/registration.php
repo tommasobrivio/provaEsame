@@ -7,6 +7,7 @@
     <title>Registration</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../script/registration.js"></script>
+    <script src="../script/showComuni.js"></script>
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
     <script>
@@ -23,6 +24,13 @@
                 mostraComuni($(this).val());
             });
 
+            $('#selectComune').change(function () {
+                $('#cap').val($(this).val());
+            });
+
+            $('#registra').click(function(){
+                registra();
+            });
         });
 
     </script>
@@ -60,7 +68,7 @@
         <div class="row">
 
             <div class="form col col-4">
-                <input type="number" id="cartaCredito" placeholder="cartaCredito" class="form-control border-black input">
+                <input type="text" id="cartaCredito" placeholder="cartaCredito" class="form-control border-black input">
             </div>
 
         </div><br>
@@ -82,7 +90,7 @@
         <div class="row">
 
             <div class="form col col-4">
-                <input type="number" id="cap" placeholder="cap" class="form-control border-black input">
+                <input type="text" id="cap" placeholder="cap" class="form-control border-black input">
             </div>
             <div class="form col col-4">
                 <input type="text" id="via" placeholder="indirizzo" class="form-control border-black input">
@@ -93,7 +101,7 @@
         <div class="row">
 
             <div class="form col col-4">
-                <button class="btn btn-dark">REGISTRA</button> 
+                <button class="btn btn-dark" id="registra">REGISTRA</button> 
             </div>
 
         </div><br>

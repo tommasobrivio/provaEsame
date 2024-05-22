@@ -11,7 +11,7 @@ $conn = new mysqli($host, $user, $psw, $db);
 
 $conn->set_charset('utf8');
 
-$sql = "SELECT regione, provincia, citta, via FROM stazione";
+$sql = "SELECT * FROM stazione";
 
 $stmt = $conn->prepare($sql);
 $stmt->execute();
