@@ -11,9 +11,20 @@ $conn = new mysqli($host, $user, $psw, $db);
 
 $conn->set_charset('utf8');
 
-$sql = "SELECT * FROM stazione";
+if(isset($_POST['last'])){
+    $sql = "SELECT * FROM stazione ORDER BY codice desc LIMIT 1";
+    $stmt = $conn->prepare($sql);
+}
+else if(isset($_POST['codice'])){
+    $sql = "SELECT * FROM stazione WHERE codice=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $_POST['codice']);
+}
+else{
+    $sql = "SELECT * FROM stazione";
+    $stmt = $conn->prepare($sql);
+}
 
-$stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
 
