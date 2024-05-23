@@ -31,8 +31,8 @@ $comuni = array();
 
 if ($result->num_rows > 1) {
     // Riempi l'array con i dati della tabella "gi_comuni"
-    while ($row = $result->fetch_assoc()) {
-        $comuni[] = $row;
+    while ($rowData = $result->fetch_assoc()) {
+        $comuni[] = $rowData;
     }
 
     // Chiudi la connessione al database

@@ -33,8 +33,8 @@ $province = array();
 
 if ($result->num_rows > 1) {
     // Riempi l'array con i dati della tabella "gi_province"
-    while ($row = $result->fetch_assoc()) {
-        $province[] = $row;
+    while ($rowData = $result->fetch_assoc()) {
+        $province[] = $rowData;
     }
 
     // Chiudi la connessione al database

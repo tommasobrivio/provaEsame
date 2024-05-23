@@ -27,11 +27,11 @@ $result = $stmt->get_result();
 if ($result->num_rows < 1) {
     $json = array("status" => "error", "message" => "nessuna bicicletta trovata");
 } else {
-    $biciclette = array();
-    while ($row = $result->fetch_assoc()) {
-        $biciclette[] = $row;
+    $operazioni = array();
+    while ($rowData = $result->fetch_assoc()) {
+        $operazioni[] = $rowData;
     }
-    $json = array("status" => "success", "message" => $biciclette);
+    $json = array("status" => "success", "message" => $operazioni);
 }
 
 echo json_encode($json);

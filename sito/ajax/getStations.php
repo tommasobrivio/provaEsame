@@ -32,8 +32,8 @@ if ($result->num_rows < 1) {
     $json = array("status" => "error", "message" => "nessuna stazione trovata");
 } else {
     $stazioni = array();
-    while ($row = $result->fetch_assoc()) {
-        $stazioni[] = $row;
+    while ($rowData = $result->fetch_assoc()) {
+        $stazioni[] = $rowData;
     }
     $json = array("status" => "success", "message" => $stazioni);
 }

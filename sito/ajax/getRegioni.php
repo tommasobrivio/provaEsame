@@ -26,8 +26,8 @@ $regioni = array();
 
 if ($result->num_rows > 1) {
     // Riempi l'array con i dati della tabella "gi_regioni"
-    while ($row = $result->fetch_assoc()) {
-        $regioni[] = $row;
+    while ($rowData = $result->fetch_assoc()) {
+        $regioni[] = $rowData;
     }
 
     // Chiudi la connessione al database

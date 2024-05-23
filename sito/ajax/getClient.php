@@ -26,8 +26,8 @@ if (!isset($_POST["id"])) {
         $json = array("status" => "error", "message" => "nessun utente trovato");
     }
     else {
-        $row = $result->fetch_assoc();
-        $json = array("status" => "success", "message" => $row);
+        $rowData = $result->fetch_assoc();
+        $json = array("status" => "success", "message" => $rowData);
     }
 
     // Chiudi la connessione al database
