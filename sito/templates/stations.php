@@ -1,14 +1,14 @@
 <?php
 
-if(!isset($_SESSION))
+if (!isset($_SESSION))
     session_start();
 
-if(!isset($_SESSION['logged'])) 
+if (!isset($_SESSION['logged']))
     header('Location: login.php');
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100% !important">
 
 <head>
     <meta charset="UTF-8">
@@ -17,10 +17,14 @@ if(!isset($_SESSION['logged']))
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
+    <script src="../script/showComuni.js"></script>
+    <script src="../script/manageStations.js"></script>
+    <script src="../script/request.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
 
     <script>
         function updateStation(id) {
-            window.location.href = 'udpate.php?codice=' + id;
+            window.location.href = 'updateStation.php?codice=' + id;
         }
 
         function deleteStation(id) {
@@ -40,17 +44,38 @@ if(!isset($_SESSION['logged']))
                         "<td>" + element['slot'] + "</td><td>" + element['citta'] + "</td>" +
                         "<td>" + element['via'] + "</td><td><button onclick='updateStation(" + element["codice"] + ")' class='update btn btn-dark'>MODIFICA</button></td>" +
                         "<td><button onclick='deleteStation(" + element["codice"] + ")' class='delete btn btn-dark'>ELIMINA</button></td></tr>";
-
-
                 });
 
                 $('#stazioni').append(table);
             });
+
+            mostraRegioni();
+
+            $('#selectRegione').change(function () {
+                mostraProvince($(this).val());
+            });
+
+            $('#selectProvincia').change(function () {
+                mostraComuni($(this).val());
+            });
+
+            $('#selectComune').change(function () {
+                $('#cap').val($(this).val());
+            });
+
+            let check=false;
+            $('#aggiungi').click(async function(){
+                check=await aggiungi();
+                if(check)
+                    await setLatLon();
+            });
+
+            
         })
     </script>
 </head>
 
-<body>
+<body style="height:100% !important;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.php">Home</a>
@@ -65,10 +90,7 @@ if(!isset($_SESSION['logged']))
                         <a class="nav-link" aria-current="page" href="stations.php">Gestione stazioni</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Gestione slot</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Gestione biciclette</a>
+                        <a class="nav-link" href="bicycles.php">Gestione biciclette</a>
                     </li>
                 </ul>
             </div>
@@ -86,6 +108,39 @@ if(!isset($_SESSION['logged']))
                 <th></th>
             </tr>
         </table>
+
+        <div class="row">
+            <h2>Aggiungi stazione</h2><br>
+            <div class="row">
+                <div class="form col col-4">
+                    <input type="number" id="slot" class="form-control border-black input" placeholder="numero slot">
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="form col col-4">
+                    <select id="selectRegione" class="form-control border-black input"></select>
+                </div>
+                <div class="form col col-4">
+                    <select id="selectProvincia" class="form-control border-black input"></select>
+                </div>
+                <div class="form col col-4">
+                    <select id="selectComune" class="form-control border-black input"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form col col-4">
+                    <input type="text" id="cap" placeholder="cap" class="form-control border-black input">
+                </div>
+                <div class="form col col-4">
+                    <input type="text" id="via" placeholder="indirizzo" class="form-control border-black input">
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="form col col-4">
+                    <button class="btn btn-dark" id="aggiungi">AGGIUNGI</button>
+                </div>
+            </div><br>
+        </div>
     </div>
 </body>
 

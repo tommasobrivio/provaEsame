@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
-    <script src="../script/showComuni.js"></script>
 
     <script>
         function getQueryParams() {
@@ -24,37 +23,75 @@
             return params;
         }
 
+
+
         $(document).ready(function () {
+
             let params = getQueryParams();
+            let id = params['user'];
+            let nome, cognome, username, password, email, cartaCredito, regione, provincia, comune, cap, via;
 
-            let codice = params['user'];
-
-            mostraRegioni();
-            $.post('../ajax/getClient.php', { id: codice }, function (data) {
-
+            $.post('../ajax/getClient.php', { id: id }, function (data) {
                 if (data['status'] == 'success') {
-
                     $('#nome').val(data['message']['nome']);
                     $('#cognome').val(data['message']['cognome']);
                     $('#username').val(data['message']['username']);
                     $('#password').val(data['message']['password']);
                     $('#email').val(data['message']['email']);
-                    $('#cartaCredito').val('*'.repeat(12) + data['message']['carta_credito'].slice(-4));
-
-                    let regione;
-                    $.get('../ajax/getRegioni.php', { nome: data['message']['regione'] }, function (data1) {
-
-                        regione=data1;
-                        $('#selectRegione').val(data1);
-                    })
-                    mostraProvince(regione);
-                    $.get('../ajax/getProvince.php', { nome: data['message']['provincia'] }, function (data2) {
-
-                        mostraComuni(data2);
-                        $('#selectProvincia').val(data2);
-                    })
-
+                    $('#cartaCredito').val(data['message']['carta_credito']);
+                    $('#regione').val(data['message']['regione']);
+                    $('#provincia').val(data['message']['provincia']);
+                    $('#comune').val(data['message']['citta']);
+                    $('#cap').val(data['message']['cap']);
+                    $('#via').val(data['message']['via']);
                 }
+            });
+
+
+
+            $('#update').click(function () {
+
+                nome = $('#nome').val();
+                cognome = $('#cognome').val();
+                username = $('#username').val();
+                password = $('#password').val();
+                email = $('#email').val();
+                cartaCredito = $('#cartaCredito').val();
+                regione = $('#regione').val();
+                provincia = $('#provincia').val();
+                comune = $('#comune').val();
+                cap = $('#cap').val();
+                via = $('#via').val();
+
+                console.log(nome)
+                let newPassword = false;
+
+                if ($('#cartaCredito').val().length == 16 && $('#cartaCredito').val().slice(-4) != cartaCredito.slice(-4)) {
+                    cartaCredito = $('#cartaCredito').val();
+                }
+                if (password != $('#password').val()) {
+                    newPassword = true;
+                    password = $('#password').val();
+                }
+
+                $.post('../ajax/updateClient.php', {
+                    nome: nome,
+                    cognome: cognome,
+                    username: username,
+                    password: password,
+                    email: email,
+                    cartaCredito: cartaCredito,
+                    regione: regione,
+                    provincia: provincia,
+                    comune: comune,
+                    cap: cap,
+                    via: via,
+                    newPassword: newPassword,
+                    id: id
+                }, function (data) {
+                    if (data['status'] == 'success')
+                        window.location.href = 'home.php';
+                })
             })
         })
     </script>
@@ -125,16 +162,16 @@
         <div class="row">
 
             <div class="form col col-4">
-                <label for="selectRegione">Regione:</label>
-                <select id="selectRegione" class="form-control border-black input"></select>
+                <label for="regione">Regione:</label>
+                <input type="text" id="regione" class="form-control border-black input">
             </div>
             <div class="form col col-4">
-                <label for="selectProvincia">Provincia:</label>
-                <select id="selectProvincia" class="form-control border-black input"></select>
+                <label for="provincia">Provincia:</label>
+                <input type="text" id="provincia" class="form-control border-black input">
             </div>
             <div class="form col col-4">
-                <label for="selectComune">Comune:</label>
-                <select id="selectComune" class="form-control border-black input"></select>
+                <label for="comune">Comune:</label>
+                <input type="text" id="comune" class="form-control border-black input">
             </div>
 
         </div><br>

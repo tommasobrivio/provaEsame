@@ -35,10 +35,7 @@ function homeAdmin()
                             <a class="nav-link" aria-current="page" href="stations.php">Gestione stazioni</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Gestione slot</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Gestione biciclette</a>
+                            <a class="nav-link" href="bicycles.php">Gestione biciclette</a>
                         </li>
                     </ul>
                 </div>
@@ -108,7 +105,7 @@ function homeClient()
             }).addTo(mymap);
 
             // Aggiungi un marker alla mappa
-            $.get('../ajax/getStazioni.php', {}, function (data) {
+            $.get('../ajax/getStations.php', {}, function (data) {
                 //prendere le stazioni, salvarle in un file json e creare vari marker per ogni stazione
                 data['message'].forEach(element => {
                     findLatLonAddMarker(element['via'] + ', ' + element['citta'] + ', ' + element['provincia'] + ', ' + element['regione'] + ', ' + 'Italy', mymap);
