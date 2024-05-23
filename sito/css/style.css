@@ -1,6 +1,13 @@
 .row{
-    padding:2% !important;
+    margin:2% !important;
 }
 .container{
     padding-top:2% !important;
+}
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
 }
