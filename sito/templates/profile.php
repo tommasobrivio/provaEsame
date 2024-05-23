@@ -1,3 +1,12 @@
+<?php
+
+if (!isset($_SESSION))
+    session_start();
+
+if (!isset($_SESSION['logged']))
+    header('Location: login.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,6 +18,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
+    <script src="../script/request.js"></script>
 
     <script>
         function getQueryParams() {
@@ -25,31 +35,32 @@
 
 
 
-        $(document).ready(function () {
+        $(document).ready(async function () {
 
             let params = getQueryParams();
             let id = params['user'];
             let nome, cognome, username, password, email, cartaCredito, regione, provincia, comune, cap, via;
 
-            $.post('../ajax/getClient.php', { id: id }, function (data) {
-                if (data['status'] == 'success') {
-                    $('#nome').val(data['message']['nome']);
-                    $('#cognome').val(data['message']['cognome']);
-                    $('#username').val(data['message']['username']);
-                    $('#password').val(data['message']['password']);
-                    $('#email').val(data['message']['email']);
-                    $('#cartaCredito').val(data['message']['carta_credito']);
-                    $('#regione').val(data['message']['regione']);
-                    $('#provincia').val(data['message']['provincia']);
-                    $('#comune').val(data['message']['citta']);
-                    $('#cap').val(data['message']['cap']);
-                    $('#via').val(data['message']['via']);
-                }
-            });
+            let data = await request('POST', '../ajax/getClient.php', { id: id })
+
+            if (data['status'] == 'success') {
+                $('#nome').val(data['message']['nome']);
+                $('#cognome').val(data['message']['cognome']);
+                $('#username').val(data['message']['username']);
+                $('#password').val(data['message']['password']);
+                $('#email').val(data['message']['email']);
+                $('#cartaCredito').val(data['message']['carta_credito']);
+                $('#regione').val(data['message']['regione']);
+                $('#provincia').val(data['message']['provincia']);
+                $('#comune').val(data['message']['citta']);
+                $('#cap').val(data['message']['cap']);
+                $('#via').val(data['message']['via']);
+            }
 
 
 
-            $('#update').click(function () {
+
+            $('#update').click(async function () {
 
                 nome = $('#nome').val();
                 cognome = $('#cognome').val();
@@ -63,7 +74,6 @@
                 cap = $('#cap').val();
                 via = $('#via').val();
 
-                console.log(nome)
                 let newPassword = false;
 
                 if ($('#cartaCredito').val().length == 16 && $('#cartaCredito').val().slice(-4) != cartaCredito.slice(-4)) {
@@ -74,7 +84,7 @@
                     password = $('#password').val();
                 }
 
-                $.post('../ajax/updateClient.php', {
+                let data = await request('POST', '../ajax/updateClient.php', {
                     nome: nome,
                     cognome: cognome,
                     username: username,
@@ -88,12 +98,13 @@
                     via: via,
                     newPassword: newPassword,
                     id: id
-                }, function (data) {
-                    if (data['status'] == 'success')
-                        window.location.href = 'home.php';
-                })
+                });
+
+                if (data['status'] == 'success')
+                    window.location.href = 'home.php';
             })
         })
+
     </script>
 </head>
 

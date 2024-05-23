@@ -27,51 +27,49 @@ if (!isset($_SESSION['logged']))
             window.location.href = 'updateStation.php?codice=' + id;
         }
 
-        function deleteStation(id) {
-            $.post('../ajax/delete.php', { table: 'stazione', id: id }, function (data) {
-                if (data['status'] == 'success') {
-                    window.location.reload();
-                }
-            })
+        async function deleteStation(id) {
+            let data = await request('POST', '../ajax/delete.php', { table: 'stazione', id: id });
+            if (data['status'] == 'success') {
+                window.location.reload();
+            }
         }
 
-        $(document).ready(function () {
+
+        $(document).ready(async function () {
 
             let table = '';
-            $.post('../ajax/getStazioni.php', {}, function (data) {
-                data['message'].forEach(element => {
-                    table += "<tr><td>" + element['codice'] + "</td>" +
-                        "<td>" + element['slot'] + "</td><td>" + element['citta'] + "</td>" +
-                        "<td>" + element['via'] + "</td><td><button onclick='updateStation(" + element["codice"] + ")' class='update btn btn-dark'>MODIFICA</button></td>" +
-                        "<td><button onclick='deleteStation(" + element["codice"] + ")' class='delete btn btn-dark'>ELIMINA</button></td></tr>";
-                });
-
-                $('#stazioni').append(table);
+            let data = await request('POST', '../ajax/getStations.php', {})
+            data['message'].forEach(element => {
+                table += "<tr><td>" + element['codice'] + "</td>" +
+                    "<td>" + element['slot'] + "</td><td>" + element['citta'] + "</td>" +
+                    "<td>" + element['via'] + "</td><td><button onclick='updateStation(" + element["codice"] + ")' class='update btn btn-dark'>MODIFICA</button></td>" +
+                    "<td><button onclick='deleteStation(" + element["codice"] + ")' class='delete btn btn-dark'>ELIMINA</button></td></tr>";
             });
 
-            mostraRegioni();
+            $('#stazioni').append(table);
 
-            $('#selectRegione').change(function () {
-                mostraProvince($(this).val());
+
+            await mostraRegioni();
+
+            $('#selectRegione').change(async function () {
+                await mostraProvince($(this).val());
             });
 
-            $('#selectProvincia').change(function () {
-                mostraComuni($(this).val());
+            $('#selectProvincia').change(async function () {
+                await mostraComuni($(this).val());
             });
 
             $('#selectComune').change(function () {
                 $('#cap').val($(this).val());
             });
 
-            let check=false;
-            $('#aggiungi').click(async function(){
-                check=await aggiungi();
-                if(check)
+            let check = false;
+            $('#aggiungi').click(async function () {
+                check = await aggiungi();
+                if (check)
                     await setLatLon();
             });
-
-            
-        })
+        });
     </script>
 </head>
 

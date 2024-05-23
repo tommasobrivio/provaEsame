@@ -22,34 +22,35 @@ if (!isset($_SESSION['logged']))
     <link rel="stylesheet" href="../css/style.css">
 
     <script>
-        function updateBycicle(id) {
+        function updateBicycle(id) {
             window.location.href = 'updateBicycle.php?id=' + id;
         }
 
-        function deleteBicycle(id) {
-            $.post('../ajax/delete.php', { table: 'bicicletta', id: id }, function (data) {
-                if (data['status'] == 'success') {
-                    window.location.reload();
-                }
-            })
+        async function deleteBicycle(id) {
+            let data = await request('POST', '../ajax/delete.php', { table: 'bicicletta', id: id })
+            if (data['status'] == 'success') {
+                window.location.reload();
+            }
         }
+
 
         $(document).ready(async function () {
 
             let table = '';
-            $.post('../ajax/getBicycle.php', {}, function (data) {
-                data['message'].forEach(element => {
-                    table += "<tr><td>" + element['latitudine'] + "</td>" +
-                        "<td>" + element['longitudine'] + "</td><td>" + element['gps'] + "</td>" +
-                        "<td>" + element['stato'] + "</td><td>" + element['RFID'] + "</td>" +
-                        "<td><button onclick='updateBicycle(" + element["ID"] + ")' class='update btn btn-dark'>MODIFICA</button></td>" +
-                        "<td><button onclick='deleteBicycle(" + element["ID"] + ")' class='delete btn btn-dark'>ELIMINA</button></td></tr>";
-                });
+            let data = await request('POST', '../ajax/getBicycle.php', {});
 
-                $('#biciclette').append(table);
+            data['message'].forEach(element => {
+                table += "<tr><td>" + element['latitudine'] + "</td>" +
+                    "<td>" + element['longitudine'] + "</td><td>" + element['gps'] + "</td>" +
+                    "<td>" + element['stato'] + "</td><td>" + element['RFID'] + "</td>" +
+                    "<td><button onclick='updateBicycle(" + element["ID"] + ")' class='update btn btn-dark'>MODIFICA</button></td>" +
+                    "<td><button onclick='deleteBicycle(" + element["ID"] + ")' class='delete btn btn-dark'>ELIMINA</button></td></tr>";
             });
 
-            let data = await request('POST', '../ajax/getStations.php', {});
+            $('#biciclette').append(table);
+
+
+            data = await request('POST', '../ajax/getStations.php', {});
 
             await showStations(data);
 
@@ -57,8 +58,8 @@ if (!isset($_SESSION['logged']))
                 await aggiungi();
             });
 
+        });
 
-        })
     </script>
 </head>
 

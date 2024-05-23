@@ -10,11 +10,12 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
+    <script src="../script/request.js"></script>
 
     <script>
 
         $(document).ready(function () {
-            $('#login').click(function () {
+            $('#login').click(async function () {
                 var username = $('#username').val();
                 var password = $('#password').val();
 
@@ -23,19 +24,19 @@
 
                 else {
 
-                    $.post('../ajax/checkLogin.php', { 'username': username, 'password': password }, function (data) {
-                        console.log(data);
-                        if (data['status'] == 'success') {
-                            window.location.href='home.php';
-                        }
-                        else {
-                            console.log(data['message'])
-                        }
-                    });
+                    let data = await request('POST', '../ajax/checkLogin.php', { 'username': username, 'password': password });
 
+                    console.log(data);
+                    if (data['status'] == 'success') {
+                        window.location.href = 'home.php';
+                    }
+                    else {
+                        console.log(data['message'])
+                    }
                 }
-            })
+            });
         })
+
     </script>
 </head>
 
