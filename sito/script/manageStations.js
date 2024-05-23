@@ -26,7 +26,7 @@ async function aggiungi() {
 
 async function setLatLon(){
 
-    let data = await request('POST', '../ajax/getStazioni.php', {last:true})
+    let data = await request('POST', '../ajax/getStations.php', {last:true})
 
     let address= data['message'][0]['via']+','+data['message'][0]['citta']+','+data['message'][0]['provincia']+','+data['message'][0]['regione']+',Italy';
     let url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address);
@@ -46,7 +46,7 @@ async function setLatLon(){
 
 async function getStazioneCodice(codice){
 
-    let data = await request('POST', '../ajax/getStazioni.php', {codice:codice});
+    let data = await request('POST', '../ajax/getStations.php', {codice:codice});
 
     $('#slot').val(data['message'][0]['slot']);
     $('#regione').val(data['message'][0]['regione']);

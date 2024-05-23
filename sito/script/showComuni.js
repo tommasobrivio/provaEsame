@@ -1,38 +1,39 @@
-function mostraRegioni() {
+async function mostraRegioni() {
 
     $('#selectRegione').empty();
     addRegione('', 'Scegli regione');
-    $.get('../ajax/getRegioni.php', {}, function (data) {
+
+    let data=await request('GET', '../ajax/getRegioni.php', {});
         
         for (let i = 0; i < data.length; i++) {
             addRegione(data[i]["codice_regione"], data[i]["denominazione_regione"]);
         }
-    });
-}
+    };
 
-function mostraProvince(codice) {
+
+async function mostraProvince(codice) {
 
     $('#selectProvincia').empty();
     addProvincia('', 'Scegli provincia');
-    $.get('../ajax/getProvince.php', { 'codice': codice }, function (data) {
+    let data=await request('GET', '../ajax/getProvince.php', { 'codice': codice });
 
         for (let i = 0; i < data.length; i++) {
             addProvincia(data[i]["sigla_provincia"], data[i]["denominazione_provincia"]);
         }
-    });
-}
+    };
 
-function mostraComuni(codice) {
+
+async function mostraComuni(codice) {
 
     $('#selectComune').empty();
     addComune('', 'Scegli comune');
-    $.get('../ajax/getComuni.php', { 'codice': codice }, function (data) {
+    let data=await request('GET', '../ajax/getComuni.php', { 'codice': codice });
 
         for (let i = 0; i < data.length; i++) {
             addComune(data[i]['cap'], data[i]["denominazione_ita"]);
         }
-    });
-}
+    };
+
 
 function addRegione(id, nome) {
 

@@ -1,4 +1,4 @@
-function registra(){
+async function registra() {
 
     var nome = $('#nome').val();
     var cognome = $('#cognome').val();
@@ -12,21 +12,22 @@ function registra(){
     var cap = $('#cap').val();
     var via = $('#via').val();
 
-    if(nome=='' || cognome=='' || email=='' || username=='' || password=='' || cartaCredito=='' || regione=='' || provincia=='' 
-        || comune=='' || cap=='' || via=='' || cartaCredito.length!=16) {  
+    if (nome == '' || cognome == '' || email == '' || username == '' || password == '' || cartaCredito == '' || regione == '' || provincia == ''
+        || comune == '' || cap == '' || via == '' || cartaCredito.length != 16) {
 
-            alert('mancano dei dati o il numero carta non è valido');
+        alert('mancano dei dati o il numero carta non è valido');
     }
     else {
-        $.post('../ajax/registration.php', {nome:nome, cognome:cognome, email:email, username:username, password:password, 
-            cartaCredito:cartaCredito, regione:regione, provincia:provincia, comune:comune, cap:cap, via:via}, function(data){
-                
-                alert(data['message']);
+        let data = await requestAnimationFrame('POST', '../ajax/registration.php',
+            {
+                nome: nome, cognome: cognome, email: email, username: username, password: password,
+                cartaCredito: cartaCredito, regione: regione, provincia: provincia, comune: comune, cap: cap, via: via
+            })
 
-                if(data['status']=='success'){
-                    window.location.href="../templates/login.php";
-                }
-        })
+        alert(data['message']);
+
+        if (data['status'] == 'success') {
+            window.location.href = "../templates/login.php";
+        }
     }
-
 }
