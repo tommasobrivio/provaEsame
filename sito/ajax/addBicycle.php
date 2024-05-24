@@ -20,7 +20,7 @@ if (
 
     $conn->set_charset("utf8");
     //inserisco la bicicletta
-    $sql = "INSERT bicicletta (latitudine, longitudine, stato)
+    $sql = "INSERT INTO bicicletta (latitudine, longitudine, stato)
         VALUES(?,?,?)";
 
     $stmt = $conn->prepare($sql);

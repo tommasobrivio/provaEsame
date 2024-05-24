@@ -4,7 +4,7 @@ if (!isset($_SESSION))
 
 function homeGuest()
 {
-    echo '
+    return '
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="home.php">Home</a>
@@ -22,7 +22,7 @@ function homeGuest()
 
 function homeAdmin()
 {
-    echo '
+    return '
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="home.php">Home</a>
@@ -37,6 +37,9 @@ function homeAdmin()
                         <li class="nav-item">
                             <a class="nav-link" href="bicycles.php">Gestione biciclette</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="utentiBloccati.php">Utenti bloccati</a>
+                        </li>
                     </ul>
                 </div>
                 <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>
@@ -47,7 +50,7 @@ function homeAdmin()
 
 function homeClient()
 {
-    echo '
+    $navBar = '
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.php">Home</a>
@@ -64,9 +67,16 @@ function homeClient()
                     </li>
                 </ul>
             </div>
-            <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>
-        </div>
+            <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>';
+    if (isset($_SESSION['statoTessera']) && $_SESSION['statoTessera'] == 'bloccata') {
+        $navBar .= 'Tessera bloccata';
+    } else {
+        $navBar .= '<button id="segnalaCarta" class="btn btn-dark" onclick="bloccaCarta(' . $_SESSION['ID'] . ')">SEGNALA CARTA</button>';
+    }
+    $navBar .= '</div>
     </nav>';
+
+    return $navBar;
 }
 ?>
 
@@ -84,6 +94,7 @@ function homeClient()
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="../script/request.js"></script>
+    <script src="../script/homeClient.js"></script>
 
     <script>
 
@@ -127,29 +138,33 @@ function homeClient()
 </head>
 
 <body>
+    <div class="row mb-3">
+        <div class="col col-12">
+            <?php
+            if (isset($_SESSION['logged'])) {
+                if (isset($_SESSION['role'])) {
+                    if ($_SESSION['role'] == 'client') {
+                        echo homeClient();
+                    } else {
+                        echo homeAdmin();
+                    }
+                } else {
+                    echo 'errore nel session "role"';
+                }
 
-    <?php
-    if (isset($_SESSION['logged'])) {
-        if (isset($_SESSION['role'])) {
-            if ($_SESSION['role'] == 'client') {
-                echo homeClient();
             } else {
-                echo homeAdmin();
+                echo homeGuest();
             }
-        } else {
-            echo 'errore nel session "role"';
-        }
-
-    } else {
-        echo homeGuest();
-    }
-    ?>
+            ?>
+        </div>
+    </div>
     <div class="container">
 
-
-
-        <div id="mapid" style="width: 100%; height: 400px;"></div>
-
+        <div class="row mb-3">
+            <div class="col col-12">
+                <div id="mapid" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
     </div>
 
 </body>

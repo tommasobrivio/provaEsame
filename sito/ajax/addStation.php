@@ -56,7 +56,7 @@ if (
 
     $conn->set_charset("utf8");
     //inserisco l'utente
-    $sql = "INSERT stazione (slot, regione, provincia, citta, cap, via)
+    $sql = "INSERT INTO stazione (slot, regione, provincia, citta, cap, via)
         VALUES(?,?,?,?,?,?)";
 
     $stmt = $conn->prepare($sql);

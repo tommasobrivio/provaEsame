@@ -63,7 +63,7 @@ if (
 
     $conn->set_charset("utf8");
     //inserisco l'utente
-    $sql = "INSERT clienti (email, username, password, nome, cognome, carta_credito, regione, provincia, citta, cap, via)
+    $sql = "INSERT INTO clienti (email, username, password, nome, cognome, carta_credito, regione, provincia, citta, cap, via)
         VALUES(?,?,md5(?),?,?,?,?,?,?,?,?)";
 
     $stmt = $conn->prepare($sql);

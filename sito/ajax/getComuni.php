@@ -27,19 +27,19 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Crea un array per contenere i risultati
-$comuni = array();
+$clienti = array();
 
 if ($result->num_rows > 1) {
     // Riempi l'array con i dati della tabella "gi_comuni"
     while ($rowData = $result->fetch_assoc()) {
-        $comuni[] = $rowData;
+        $clienti[] = $rowData;
     }
 
     // Chiudi la connessione al database
     $conn->close();
 
     // Ritorna i dati in formato JSON
-    echo json_encode($comuni);
+    echo json_encode($clienti);
 }
 else if($result->num_rows == 1){
     // Ritorna i dati in formato JSON

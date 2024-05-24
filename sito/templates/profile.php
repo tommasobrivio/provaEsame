@@ -19,6 +19,7 @@ if (!isset($_SESSION['logged']))
     <script src="../cdn/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../cdn/bootstrap.min.css" />
     <script src="../script/request.js"></script>
+    <script src="../script/homeClient.js"></script>
 
     <script>
         function getQueryParams() {
@@ -126,6 +127,13 @@ if (!isset($_SESSION['logged']))
                 </ul>
             </div>
             <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>
+            <?php if(isset($_SESSION['statoTessera']) && $_SESSION['statoTessera']=='bloccata'){
+                echo 'Tessera bloccata';
+            }
+            else{
+                echo '<button id="segnalaCarta" class="btn btn-dark" onclick="bloccaCarta('.$_SESSION['ID'].')">SEGNALA CARTA</button>';
+            }?>
+            <button id="segnalaCarta" class="btn btn-dark" onclick="bloccaCarta(<?php $_SESSION['ID'] ?>)">SEGNALA CARTA</button>
         </div>
     </nav>
 

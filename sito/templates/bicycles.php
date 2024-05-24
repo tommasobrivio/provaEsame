@@ -80,6 +80,9 @@ if (!isset($_SESSION['logged']))
                     <li class="nav-item">
                         <a class="nav-link" href="bicycles.php">Gestione biciclette</a>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="utentiBloccati.php">Utenti bloccati</a>
+                    </li>
                 </ul>
             </div>
             <a href="logout.php"><button class="btn btn-dark">LOGOUT</button></a>
